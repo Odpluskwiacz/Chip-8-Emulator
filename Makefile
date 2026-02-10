@@ -1,14 +1,24 @@
-.PHONY: all run clean
+CC = gcc
+CFLAGS = -Iinclude -Wall -Wextra -g
+LDFLAGS = -Llib -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
-all:
-	gcc src/main.c src/cpu.c -o emulator
+TARGET = build/main
+SRC = src/*.c
 
-memory.bin:
-	echo -ne '\x01\x08\x03\x09\x02\x0A\xFF\x00\x05\x03\x00' > memory.bin
 
-run: all memory.bin
-	./emulator
+build: $(TARGET)
+
+$(TARGET): $(SRC)
+	@mkdir -p build
+	$(CC) $(SRC) -o $(TARGET) $(CFLAGS) $(LDFAGS)
+
+run: build
+	./$(TARGET)
 
 clean:
-	rm -f emulator memory.bin
+	rm -f $(TARGET)
+
+# odpowiedzalny za generowanie .json działanie clangd 
+bear:
+	bear -- make build
 

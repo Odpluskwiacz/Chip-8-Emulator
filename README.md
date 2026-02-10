@@ -1,20 +1,6 @@
-## Emulator CPU w C
+# 8bit Emulator
 
-#### Specyfikacje: 
-- 8 bit CPU
-- 256 bajtów RAM 0x00-0xFF
-- Rejestry A, B, PC, FLAG
-
-
-#### Zestaw instrukcji
-        0x01 LDA Załaduj do A z pamięci
-        0x02 STA Zapisz do pamięci
-        0x03 ADD Dodaj do A wartość z pamięci
-        0x04 SUB Odejmij od A wartość z pamięci
-        0x05 JMP Skocz do addresu
-        0x06 JZ Skocz jeśli FLAGI == 0
-        0xFF HLT Zatrzymaj koniec basta
-
-
-> Do skompilowania mam plik Makefile
-    do edycji pamięci CPU należy użyć memory.bin: znajdującym się w Makefile
+### Źródła
+[Main Source](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#dispcoords)
+[Extra](https://chip-8.github.io/links/)
+[Wiki](https://en.wikipedia.org/wiki/CHIP-8)
