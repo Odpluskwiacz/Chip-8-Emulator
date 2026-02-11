@@ -4,16 +4,17 @@ LDFLAGS = -Llib -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 TARGET = build/main
 SRC = src/*.c
+ROM = build/*.ch8
 
 
 build: $(TARGET)
 
 $(TARGET): $(SRC)
 	@mkdir -p build
-	$(CC) $(SRC) -o $(TARGET) $(CFLAGS) $(LDFAGS)
+	$(CC) $(SRC) -o $(TARGET) $(CFLAGS) $(LDFLAGS)
 
 run: build
-	./$(TARGET)
+	./$(TARGET) $(ROM)
 
 clean:
 	rm -f $(TARGET)
