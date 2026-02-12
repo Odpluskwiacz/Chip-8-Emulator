@@ -5,18 +5,18 @@
 - [X] Memory
 - [X] Registers  
 - [X] Display
-    - [X] Rysowanie pikselka :)
+    - [X] Rysowanie pikselka :) test
     - [ ] Font  
 - [X] Inicjalizacja
 - [X] Otwieranie ROM
 - [X] main
 - [ ] Instrukcje  
-    - [ ] 00E0 (clear screan)
-    - [ ] 1NNN (Jumo)
-    - [ ] 6XNN (Set register VX)
-    - [ ] 7XNN (add value to register VX)
-    - [ ] ANNN (set index register I)
-    - [ ] DXYN (displa/Draw)
+    - [X] 00E0 (clear screan)
+    - [X] 1NNN (Jumo)
+    - [X] 6XNN (Set register VX)
+    - [X] 7XNN (add value to register VX)
+    - [X] ANNN (set index register I)
+    - [X] DXYN (displa/Draw) trudne
 - [ ] keyboard  
 
 ### muzyka

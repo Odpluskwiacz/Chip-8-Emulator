@@ -4,7 +4,7 @@ LDFLAGS = -Llib -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 TARGET = build/main
 SRC = src/*.c
-ROM = build/*.ch8
+ALL = $(wildcard build/*.ch8)
 
 
 build: $(TARGET)
@@ -14,7 +14,13 @@ $(TARGET): $(SRC)
 	$(CC) $(SRC) -o $(TARGET) $(CFLAGS) $(LDFLAGS)
 
 run: build
-	./$(TARGET) $(ROM)
+	@printf "Wpisz ROM: "
+	@read ROM; ./$(TARGET) "$$ROM"
+
+run_all: build
+	for f in $(ALL); do \
+		./$(TARGET) "$$f"; \
+	done	
 
 clean:
 	rm -f $(TARGET)

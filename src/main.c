@@ -41,9 +41,122 @@ void chip8_load_rom(struct chip8 *chip, const char* filename)
 
 // Tu są wszystkie zaimplementowane optcody 
 //PO CO: żeby procesor wiedział co ma robić
+//giga ważne Fetch->Decode->execute
+// Jak zaimplementuje wszystkie to przeniose do oddzielnego pliku
 void chip8_cycle(struct chip8* chip)
 {
+  chip->opcode = chip->memory[chip->pc] << 8 | chip->memory[chip->pc + 1];
+  chip->pc += 2;
 
+  switch(chip->opcode & 0xF000)
+  {
+    case 0x0000:
+      if (chip->opcode & 0x00E0) //CLS clear display
+      {
+        memset(chip->display, 0, sizeof(chip->display));
+      }
+      break;
+    case 0x1000:
+      // 1nnn
+      // Skok do adresu nnn
+      chip->pc = chip->opcode & 0x0FFF;
+      break;
+    case 0x2000:
+      printf("jescze go nie zaimplementowałem :P");
+      break;
+    case 0x3000:
+      printf("jescze go nie zaimplementowałem :P");
+      break;
+    case 0x4000:
+      printf("jescze go nie zaimplementowałem :P");
+      break;
+    case 0x5000:
+      printf("jescze go nie zaimplementowałem :P");
+      break;
+    case 0x6000:
+      // 6xkk LD Vx
+      // interpterer wkłada kk do rejestru Vx
+      {
+        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+        unsigned char kk = chip->opcode & 0x00FF;
+        chip->V[x] = kk;
+      }
+      break;
+    case 0x7000:
+      // 7xkk ADD Vx
+      // dodaje kk do rejestru Vx
+      {
+        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+        unsigned char kk = chip->opcode & 0x00FF;
+        chip->V[x] += kk;
+      }
+      break;
+    case 0x8000:
+      printf("jescze go nie zaimplementowałem :P");
+      break;
+    case 0x9000:
+      printf("jescze go nie zaimplementowałem :P");
+      break;
+    case 0xA000:
+      // Annn LD I
+      // ustawić I na nnn
+      // unsigned short 4095 bo potrzeba 12 bitów na 0xfff
+      {
+        unsigned short nnn = chip->opcode & 0x0FFF;
+        chip->I = nnn;
+      }
+      break;
+    case 0xB000:
+      printf("jescze go nie zaimplementowałem :P");
+      break;
+    case 0xC000:
+      printf("jescze go nie zaimplementowałem :P");
+      break;
+    case 0xD000:
+      // D xyn DRW Vx Vy
+      // x , y = wartości na planszy n = wysokosc rysowania, szerokośc to 8
+      // DDDD xxxx yyyy nnnn
+      // 0000 xxxx 0000 0000 (>> 8) 0000 0000 0000 xxxx
+      // 0000 0000 yyyy 0000 (>> 4) 0000 0000 0000 yyyy
+      {
+      unsigned char x = chip->V[(chip->opcode & 0x0F00) >> 8];
+      unsigned char y = chip->V[(chip->opcode & 0x00F0) >> 4];
+      unsigned char height = chip->opcode & 0x000F;
+      chip->V[0xF] = 0; //VF kolizja
+      
+      for (int row = 0; row < height; row++)
+      {
+        unsigned char sprite = chip->memory[chip->I + row];
+        
+        for (int col = 0; col < 8; col++)
+        {
+          if(sprite & (0x80 >> col)) // 1000 0000, 0100 0000 ... 0000 0001
+          {
+            int px = (x + col) % WIDTH;
+            int py = (y + row) % HEIGHT;
+            int index = px + (py * WIDTH);
+
+            if (chip->display[index] == 1)
+              chip->V[0xF] = 1; // xorowanie
+
+            chip->display[index] ^= 1;
+          }
+        }
+      }
+      }
+      break;
+    case 0xE000:
+      printf("jescze go nie zaimplementowałem :P");
+      break;
+    case 0xF000:
+      printf("jescze go nie zaimplementowałem :P");
+      break;
+
+    deafault:
+      printf("Nieznany opcode: %04x \n", chip->opcode);
+      break;
+  }
+  
 }
 
 void chip8_draw(struct chip8* chip)
@@ -74,16 +187,16 @@ int main(int argc, char **argv)
 
     while (!WindowShouldClose())
     { 
-        // więcej akcji na sekunde jak będzie trzeba
-        //for (int i = 0; i < 10; i++)
+      // więcej akcji
+      for (int i = 0; i < 10; i++)
         chip8_cycle(&chip);
 
-        BeginDrawing();
-        ClearBackground(BLACK);
+      BeginDrawing();
+      ClearBackground(BLACK);
 
-        chip8_draw(&chip);
+      chip8_draw(&chip);
 
-        EndDrawing();
+      EndDrawing();
     }
 
     CloseWindow();
