@@ -78,7 +78,7 @@ void chip8_cycle(struct chip8* chip)
       // Skok do adresu nnn
       chip->pc = chip->opcode & 0x0FFF;
       break;
-   /* case 0x2000:
+    case 0x2000:
       // 2NNN
       // 1.The interpreter increments the stack pointer, 
       // 2.then puts the current PC on the top of the stack. 
@@ -93,8 +93,8 @@ void chip8_cycle(struct chip8* chip)
         // 3. ProgramCounter = nnn
         chip->pc = nnn;
       }
-      break; */
-   case 0x6000:
+      break;
+    case 0x6000:
       // 6xkk LD Vx
       // interpterer wkłada kk do rejestru Vx
       {
@@ -112,7 +112,7 @@ void chip8_cycle(struct chip8* chip)
         chip->V[x] += kk;
       }
       break;
-   case 0xA000:
+    case 0xA000:
       // Annn LD I
       // ustawić I na nnn
       // unsigned short 4095 bo potrzeba 12 bitów na 0xfff
@@ -121,7 +121,7 @@ void chip8_cycle(struct chip8* chip)
         chip->I = nnn;
       }
       break;
-   case 0xD000:
+    case 0xD000:
       // D xyn DRW Vx Vy
       // x , y = wartości na planszy n = wysokosc rysowania, szerokośc to 8
       // DDDD xxxx yyyy nnnn
@@ -154,6 +154,7 @@ void chip8_cycle(struct chip8* chip)
       }
       }
       break;
+    default:
      printf("Nieznany opcode: %04x \n", chip->opcode);
       break;
   }
