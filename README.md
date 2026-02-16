@@ -1,4 +1,4 @@
-# 8bit Emulator
+# CHIP8
 
 ### Poprawnie działający kod
 Widać na załączonym gif'ie
