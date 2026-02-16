@@ -39,6 +39,23 @@ void chip8_load_rom(struct chip8 *chip, const char* filename)
   fclose(f);
 }
 
+
+void chip8_draw(struct chip8* chip)
+{
+    for (int y = 0; y < HEIGHT; y++)
+    {
+        for (int x = 0; x < WIDTH; x++)
+        {
+            if (chip->display[x + y * WIDTH])
+            {
+                DrawRectangle(x * SKALA, y * SKALA, SKALA, SKALA, GREEN);
+            }
+        }
+    }
+}
+
+
+
 // Tu są wszystkie zaimplementowane optcody 
 //PO CO: żeby procesor wiedział co ma robić
 //giga ważne Fetch->Decode->execute
@@ -61,19 +78,23 @@ void chip8_cycle(struct chip8* chip)
       // Skok do adresu nnn
       chip->pc = chip->opcode & 0x0FFF;
       break;
-    case 0x2000:
-      printf("jescze go nie zaimplementowałem :P");
-      break;
-    case 0x3000:
-      printf("jescze go nie zaimplementowałem :P");
-      break;
-    case 0x4000:
-      printf("jescze go nie zaimplementowałem :P");
-      break;
-    case 0x5000:
-      printf("jescze go nie zaimplementowałem :P");
-      break;
-    case 0x6000:
+   /* case 0x2000:
+      // 2NNN
+      // 1.The interpreter increments the stack pointer, 
+      // 2.then puts the current PC on the top of the stack. 
+      // 3.The PC is then set to nnn
+      // Specyfikacja ang. ma złą kolejnośc 2->1->3
+      {
+        unsigned short nnn = chip->opcode & 0x0FFF;
+        // 1. ProgramCounter na górze stack
+        chip->stack[chip->sp] = chip->pc; 
+        // 2. zwiekszam stack pointer
+        chip->sp++;
+        // 3. ProgramCounter = nnn
+        chip->pc = nnn;
+      }
+      break; */
+   case 0x6000:
       // 6xkk LD Vx
       // interpterer wkłada kk do rejestru Vx
       {
@@ -91,13 +112,7 @@ void chip8_cycle(struct chip8* chip)
         chip->V[x] += kk;
       }
       break;
-    case 0x8000:
-      printf("jescze go nie zaimplementowałem :P");
-      break;
-    case 0x9000:
-      printf("jescze go nie zaimplementowałem :P");
-      break;
-    case 0xA000:
+   case 0xA000:
       // Annn LD I
       // ustawić I na nnn
       // unsigned short 4095 bo potrzeba 12 bitów na 0xfff
@@ -106,13 +121,7 @@ void chip8_cycle(struct chip8* chip)
         chip->I = nnn;
       }
       break;
-    case 0xB000:
-      printf("jescze go nie zaimplementowałem :P");
-      break;
-    case 0xC000:
-      printf("jescze go nie zaimplementowałem :P");
-      break;
-    case 0xD000:
+   case 0xD000:
       // D xyn DRW Vx Vy
       // x , y = wartości na planszy n = wysokosc rysowania, szerokośc to 8
       // DDDD xxxx yyyy nnnn
@@ -145,33 +154,13 @@ void chip8_cycle(struct chip8* chip)
       }
       }
       break;
-    case 0xE000:
-      printf("jescze go nie zaimplementowałem :P");
-      break;
-    case 0xF000:
-      printf("jescze go nie zaimplementowałem :P");
-      break;
-
-    deafault:
-      printf("Nieznany opcode: %04x \n", chip->opcode);
+     printf("Nieznany opcode: %04x \n", chip->opcode);
       break;
   }
   
 }
 
-void chip8_draw(struct chip8* chip)
-{
-    for (int y = 0; y < HEIGHT; y++)
-    {
-        for (int x = 0; x < WIDTH; x++)
-        {
-            if (chip->display[x + y * WIDTH])
-            {
-                DrawRectangle(x * SKALA, y * SKALA, SKALA, SKALA, GREEN);
-            }
-        }
-    }
-}
+
 
 
 // Główna pętla prawie jak podstawowy projekt w raylib

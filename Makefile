@@ -4,7 +4,7 @@ LDFLAGS = -Llib -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 TARGET = build/main
 SRC = src/*.c
-ALL = $(wildcard build/*.ch8)
+ALL = $(wildcard build/*.ch8 build/*.c8)
 
 
 build: $(TARGET)
