@@ -1,5 +1,7 @@
 # 8bit Emulator
 
+### Poprawnie działający kod
+Widać na załączonym gif'ie
 ![Properyl working 8-bit Emulator](gif.gif)
 
 ### Źródła
