@@ -1,5 +1,7 @@
 # TODO
 
+## Important
+- [ ] Zamień unsing int na <stdint.h> uint16_t itp.
 
 ### Architekura
 - [X] Memory
