@@ -68,16 +68,24 @@ void chip8_cycle(struct chip8* chip)
   switch(chip->opcode & 0xF000)
   {
     case 0x0000:
-      if (chip->opcode & 0x00E0) //CLS clear display
+      switch (chip->opcode & 0x00FF)
       {
-        memset(chip->display, 0, sizeof(chip->display));
+        case 0x00E0: //CLS
+          memset(chip->display, 0, sizeof(chip->display));
+          break;
+      
+        case 0x00EE: // Return form subrutin == .POP
+          chip->sp--;
+          chip->pc = chip->stack[chip->sp];
+        break;
+
       }
-      break;
+    break;
     case 0x1000:
       // 1nnn
       // Skok do adresu nnn
       chip->pc = chip->opcode & 0x0FFF;
-      break;
+    break;
     case 0x2000:
       // 2NNN
       // 1.The interpreter increments the stack pointer, 
@@ -93,7 +101,7 @@ void chip8_cycle(struct chip8* chip)
         // 3. ProgramCounter = nnn
         chip->pc = nnn;
       }
-      break;
+    break;
     case 0x6000:
       // 6xkk LD Vx
       // interpterer wkłada kk do rejestru Vx
@@ -102,7 +110,7 @@ void chip8_cycle(struct chip8* chip)
         unsigned char kk = chip->opcode & 0x00FF;
         chip->V[x] = kk;
       }
-      break;
+    break;
     case 0x7000:
       // 7xkk ADD Vx
       // dodaje kk do rejestru Vx
@@ -111,7 +119,7 @@ void chip8_cycle(struct chip8* chip)
         unsigned char kk = chip->opcode & 0x00FF;
         chip->V[x] += kk;
       }
-      break;
+    break;
     case 0xA000:
       // Annn LD I
       // ustawić I na nnn
@@ -120,7 +128,7 @@ void chip8_cycle(struct chip8* chip)
         unsigned short nnn = chip->opcode & 0x0FFF;
         chip->I = nnn;
       }
-      break;
+    break;
     case 0xD000:
       // D xyn DRW Vx Vy
       // x , y = wartości na planszy n = wysokosc rysowania, szerokośc to 8
@@ -153,10 +161,10 @@ void chip8_cycle(struct chip8* chip)
         }
       }
       }
-      break;
+    break;
     default:
      printf("Nieznany opcode: %04x \n", chip->opcode);
-      break;
+    break;
   }
   
 }
