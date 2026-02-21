@@ -1,3 +1,7 @@
+#ifndef MAIN_H
+// Przygotowanie do
+// Architektury projektu: Unity Build
+#define MAIN_H
 
 struct chip8
 {
@@ -35,3 +39,4 @@ unsigned short sp;
 unsigned char key[16];
 };
 
+#endif
