@@ -22,7 +22,7 @@
     - [X] ANNN (set index register I)
     - [X] DXYN (displa/Draw) trudne
 - [ ] Instrukcje
-    - [ ] 00EE (return from subrutine)
+    - [X] 00EE (return from subrutine)
     - [X] 2NN
     - [ ] 3xkk
     - [ ] 4xkk
