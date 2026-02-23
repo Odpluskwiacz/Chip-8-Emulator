@@ -24,7 +24,7 @@
 - [ ] Instrukcje
     - [X] 00EE (return from subrutine)
     - [X] 2NN
-    - [ ] 3xkk
+    - [X] 3xkk
     - [ ] 4xkk
     - [ ] 5xy0
     - [ ] 8xy0

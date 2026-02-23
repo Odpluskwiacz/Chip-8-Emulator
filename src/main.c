@@ -113,6 +113,16 @@ void chip8_cycle(struct chip8* chip)
           chip->pc += 2;
       } 
     break;
+    case 0x4000:
+      // 4xkk
+      // skip next instruction iv Vx != kk
+      {
+        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+        unsigned char kk = chip->opcode & 0x00FF;
+        if (chip->V[x] != kk)
+          chip->pc += 2;
+      }
+    break;
     case 0x6000:
       // 6xkk LD Vx
       // interpterer wkłada kk do rejestru Vx
