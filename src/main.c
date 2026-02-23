@@ -123,6 +123,16 @@ void chip8_cycle(struct chip8* chip)
           chip->pc += 2;
       }
     break;
+    case 0x5000:
+      // 5xy0
+      // Skip next instruction if Vx = Vy.
+      {
+        unsigned char x = (chip->opcode & 0xF00) >> 8;
+        unsigned char y = (chip->opcode & 0x00F) >> 4;
+        if (chip->V[x] == chip->V[y])
+          chip->pc += 2;
+      }
+    break;
     case 0x6000:
       // 6xkk LD Vx
       // interpterer wkłada kk do rejestru Vx
@@ -140,6 +150,58 @@ void chip8_cycle(struct chip8* chip)
         unsigned char kk = chip->opcode & 0x00FF;
         chip->V[x] += kk;
       }
+    break;
+    case 0x8000:
+      switch (chip->opcode & 0x800F)
+    { 
+      // 8xy0 Vx = Vyd
+      case 0x8000:
+        {
+          unsigned char x = (chip->opcode & 0x0F00) >> 8;
+          unsigned char y = (chip->opcode & 0x00F0) >> 4;
+          chip->V[x] = chip->V[y];
+        }
+      break; 
+      case 0x8001:
+      {
+        //Set Vx = Vx OR Vy.
+        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+        unsigned char y = (chip->opcode & 0x00F0) >> 4;
+        chip->V[x] = chip->V[x] | chip->V[y];
+      }
+      break;
+      case 0x8002:
+      {
+         //set vx = vx and vy.
+        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+        unsigned char y = (chip->opcode & 0x00F0) >> 4;
+        chip->V[x] = chip->V[x] & chip->V[y]; 
+      }
+      break;
+      case 0x8003:
+      {
+         //set vx = vx and vy.
+        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+        unsigned char y = (chip->opcode & 0x00F0) >> 4;
+        chip->V[x] = chip->V[x] ^ chip->V[y]; 
+      }
+      break;
+      case 0x8004:
+      {
+        // Vx = Vx + Vy, set VF = carry.
+        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+        unsigned char y = (chip->opcode & 0x00F0) >> 4;
+        unsigned short sum = chip->V[x] + chip->V[y];
+
+        if(sum > 255)
+          chip->V[15] = 1;
+        else;
+          chip->V[15] = 0;
+        
+        chip->V[x] = sum & 0xFF;
+      }
+      break; 
+    }         
     break;
     case 0xA000:
       // Annn LD I

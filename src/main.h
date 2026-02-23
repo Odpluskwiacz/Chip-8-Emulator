@@ -15,7 +15,7 @@ unsigned char memory[4096];
 // opcode = operation code
 unsigned short opcode;
 
- //V0,V1 ... VD,VE
+ //V0,V1 ... VD,VE,VF
 unsigned char V[16];                    
 
 // I = Index register   

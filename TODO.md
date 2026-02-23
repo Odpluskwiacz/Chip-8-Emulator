@@ -25,13 +25,13 @@
     - [X] 00EE (return from subrutine)
     - [X] 2NN
     - [X] 3xkk
-    - [ ] 4xkk
-    - [ ] 5xy0
-    - [ ] 8xy0
-    - [ ] 8xy1
-    - [ ] 8xy2
-    - [ ] 8xy3
-    - [ ] 8xy4
+    - [X] 4xkk
+    - [X] 5xy0
+    - [X] 8xy0
+    - [X] 8xy1
+    - [X] 8xy2
+    - [X] 8xy3
+    - [X] 8xy4
     - [ ] 8xy5
     - [ ] 8xy6
     - [ ] 8xyE
