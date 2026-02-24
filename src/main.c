@@ -194,13 +194,28 @@ void chip8_cycle(struct chip8* chip)
         unsigned short sum = chip->V[x] + chip->V[y];
 
         if(sum > 255)
-          chip->V[15] = 1;
+          chip->V[15] = 1; // V[15] == VF
         else;
           chip->V[15] = 0;
         
         chip->V[x] = sum & 0xFF;
       }
       break; 
+      case 0x8005:
+      {
+        // 0x8xy5
+        // Vx = Vx - Vy, set VF = NOT borrow.
+        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+        unsigned char y = (chip->opcode & 0x00F0) >> 4;
+        unsigned short sum = chip->V[x] - chip->V[y];
+
+        if(chip->V[x] > chip->V[y])
+          chip->V[15] = 1; //V[15] == VF
+        else;
+          chip->V[15] = 0; 
+        
+        chip->V[x] = sum;
+      }
     }         
     break;
     case 0xA000:
