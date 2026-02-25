@@ -194,8 +194,8 @@ void chip8_cycle(struct chip8* chip)
         unsigned short sum = chip->V[x] + chip->V[y];
 
         if(sum > 255)
-          chip->V[15] = 1; // V[15] == VF
-        else;
+          chip->V[15] = 1;
+        else
           chip->V[15] = 0;
         
         chip->V[x] = sum & 0xFF;
@@ -211,11 +211,24 @@ void chip8_cycle(struct chip8* chip)
 
         if(chip->V[x] > chip->V[y])
           chip->V[15] = 1; //V[15] == VF
-        else;
+        else
           chip->V[15] = 0; 
         
         chip->V[x] = sum;
       }
+      break;
+      case 0x8006: //Shift Right
+      {
+        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+
+        if((chip->V[x] & 0x01) == 1)
+          chip->V[15] = 1;
+        else
+          chip->V[15] = 0;
+
+        chip->V[x] >>= 1;
+      }
+      break;
     }         
     break;
     case 0xA000:
