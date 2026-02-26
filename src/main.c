@@ -229,6 +229,18 @@ void chip8_cycle(struct chip8* chip)
         chip->V[x] >>= 1;
       }
       break;
+      case 0x800E: //8xyE
+      {
+        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+
+        if((chip->V[x] & 0x80) == 1)
+          chip->V[15] = 1;
+        else
+          chip->V[15] = 0;
+
+        chip->V[x] <<= 1;
+      }
+      break;
     }         
     break;
     case 0xA000:
