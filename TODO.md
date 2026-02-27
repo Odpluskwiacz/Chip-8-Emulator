@@ -34,7 +34,7 @@
     - [X] 8xy4
     - [X] 8xy5
     - [X] 8xy6
-    - [ ] 8xyE
+    - [X] 8xyE
     - [ ] 9xy0
     - [ ] Bnnn
     - [ ] Cxkk

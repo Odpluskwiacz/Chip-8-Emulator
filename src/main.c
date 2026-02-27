@@ -229,11 +229,25 @@ void chip8_cycle(struct chip8* chip)
         chip->V[x] >>= 1;
       }
       break;
+      case 0x8007: // SUBN Vx, Vy
+      {
+        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+        unsigned char y = (chip->opcode & 0x00F0) >> 4;
+        unsigned short sum = (chip->V[y] - chip->V[x]);
+
+        if (chip->V[y] >= chip->V[x])
+          chip->V[15] = 1;
+        else
+          chip->V[15] = 0;
+
+        chip->V[x] = sum;
+      }
+      break;
       case 0x800E: //8xyE
       {
         unsigned char x = (chip->opcode & 0x0F00) >> 8;
 
-        if((chip->V[x] & 0x80) == 1)
+        if((chip->V[x] & 0x80) != 0)
           chip->V[15] = 1;
         else
           chip->V[15] = 0;
