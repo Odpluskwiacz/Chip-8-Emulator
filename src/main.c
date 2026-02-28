@@ -257,6 +257,15 @@ void chip8_cycle(struct chip8* chip)
       break;
     }         
     break;
+    case 0x9000: //9xy0
+    {
+      unsigned char x = (chip->opcode & 0x0F00) >> 8;
+      unsigned char y = (chip->opcode & 0x00F0) >> 4;
+      // skip next instruction if Vx != Vy
+      if(chip->V[x] != chip->V[y])
+        chip->pc += 2; 
+    }
+    break;
     case 0xA000:
       // Annn LD I
       // ustawić I na nnn
