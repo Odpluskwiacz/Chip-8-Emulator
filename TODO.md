@@ -37,7 +37,7 @@
     - [X] 8xyE
     - [X] 9xy0
     - [X] Bnnn
-    - [ ] Cxkk
+    - [X] Cxkk
     - [ ] Ex9E
     - [ ] ExA1
     - [ ] Fx07

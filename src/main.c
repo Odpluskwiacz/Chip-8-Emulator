@@ -283,6 +283,18 @@ void chip8_cycle(struct chip8* chip)
       chip->pc = nnn + chip->V[0]; 
     }
     break;
+    case 0xC000:
+    // Cxkk
+    // Vx = random byte AND kk
+    {
+      unsigned char kk = chip->opcode & 0x00FF;
+      unsigned char x = chip->opcode & 0x0F00 >> 8;
+      // rand() % (max_number + 1 - minimum_number) + minimum_number
+      unsigned char random = rand() % (255 + 1 - 0) + 0;
+      
+      chip->V[x] = random & kk;
+    }
+    break;
     case 0xD000:
       // D xyn DRW Vx Vy
       // x , y = wartości na planszy n = wysokosc rysowania, szerokośc to 8
