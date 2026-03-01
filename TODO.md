@@ -36,7 +36,7 @@
     - [X] 8xy6
     - [X] 8xyE
     - [X] 9xy0
-    - [ ] Bnnn
+    - [X] Bnnn
     - [ ] Cxkk
     - [ ] Ex9E
     - [ ] ExA1

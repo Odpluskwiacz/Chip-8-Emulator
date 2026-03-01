@@ -257,7 +257,7 @@ void chip8_cycle(struct chip8* chip)
       break;
     }         
     break;
-    case 0x9000: //9xy0
+       case 0x9000: //9xy0
     {
       unsigned char x = (chip->opcode & 0x0F00) >> 8;
       unsigned char y = (chip->opcode & 0x00F0) >> 4;
@@ -274,6 +274,14 @@ void chip8_cycle(struct chip8* chip)
         unsigned short nnn = chip->opcode & 0x0FFF;
         chip->I = nnn;
       }
+    break;
+    case 0xB000:
+    //Bnnn
+    // pc = nnn + V0 
+    {
+      unsigned short nnn = chip->opcode & 0x0FFF;
+      chip->pc = nnn + chip->V[0]; 
+    }
     break;
     case 0xD000:
       // D xyn DRW Vx Vy
