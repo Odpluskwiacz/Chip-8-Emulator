@@ -1,7 +1,7 @@
 # TODO
 
 ## Important
-- [ ] Zamień unsing int na <stdint.h> uint16_t itp.
+- [X] Zamień unsing int na <stdint.h> uint16_t itp.
 
 ### Architekura
 - [X] Memory
@@ -40,7 +40,7 @@
     - [X] Cxkk
     - [ ] Ex9E
     - [ ] ExA1
-    - [ ] Fx07
+    - [X] Fx07
     - [ ] Fx0A
     - [ ] Fx15
     - [ ] Fx18

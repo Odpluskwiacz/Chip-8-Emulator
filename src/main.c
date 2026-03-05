@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <include/raylib.h>
+
 #include "main.h"
 
 #define WIDTH 64
@@ -42,9 +43,9 @@ void chip8_load_rom(struct chip8 *chip, const char* filename)
 
 void chip8_draw(struct chip8* chip)
 {
-    for (int y = 0; y < HEIGHT; y++)
+    for (int32_t y = 0; y < HEIGHT; y++)
     {
-        for (int x = 0; x < WIDTH; x++)
+        for (int32_t x = 0; x < WIDTH; x++)
         {
             if (chip->display[x + y * WIDTH])
             {
@@ -93,7 +94,7 @@ void chip8_cycle(struct chip8* chip)
       // 3.The PC is then set to nnn
       // Specyfikacja ang. ma złą kolejnośc 2->1->3
       {
-        unsigned short nnn = chip->opcode & 0x0FFF;
+        uint16_t nnn = chip->opcode & 0x0FFF;
         // 1. ProgramCounter na górze stack
         chip->stack[chip->sp] = chip->pc; 
         // 2. zwiekszam stack pointer
@@ -107,8 +108,8 @@ void chip8_cycle(struct chip8* chip)
       // skip next instruction if Vx = kk
       // compere register Vx == kk if True pc += 2
       {
-        unsigned char x = (chip->opcode & 0x0F00) >> 8;
-        unsigned char kk = chip->opcode & 0x00FF;
+        uint8_t x = (chip->opcode & 0x0F00) >> 8;
+        uint8_t kk = chip->opcode & 0x00FF;
         if (chip->V[x] == kk) 
           chip->pc += 2;
       } 
@@ -117,8 +118,8 @@ void chip8_cycle(struct chip8* chip)
       // 4xkk
       // skip next instruction iv Vx != kk
       {
-        unsigned char x = (chip->opcode & 0x0F00) >> 8;
-        unsigned char kk = chip->opcode & 0x00FF;
+        uint8_t x = (chip->opcode & 0x0F00) >> 8;
+        uint8_t kk = chip->opcode & 0x00FF;
         if (chip->V[x] != kk)
           chip->pc += 2;
       }
@@ -127,8 +128,8 @@ void chip8_cycle(struct chip8* chip)
       // 5xy0
       // Skip next instruction if Vx = Vy.
       {
-        unsigned char x = (chip->opcode & 0xF00) >> 8;
-        unsigned char y = (chip->opcode & 0x00F) >> 4;
+        uint8_t x = (chip->opcode & 0xF00) >> 8;
+        uint8_t y = (chip->opcode & 0x00F) >> 4;
         if (chip->V[x] == chip->V[y])
           chip->pc += 2;
       }
@@ -137,8 +138,8 @@ void chip8_cycle(struct chip8* chip)
       // 6xkk LD Vx
       // interpterer wkłada kk do rejestru Vx
       {
-        unsigned char x = (chip->opcode & 0x0F00) >> 8;
-        unsigned char kk = chip->opcode & 0x00FF;
+        uint8_t x = (chip->opcode & 0x0F00) >> 8;
+        uint8_t kk = chip->opcode & 0x00FF;
         chip->V[x] = kk;
       }
     break;
@@ -146,8 +147,8 @@ void chip8_cycle(struct chip8* chip)
       // 7xkk ADD Vx
       // dodaje kk do rejestru Vx
       {
-        unsigned char x = (chip->opcode & 0x0F00) >> 8;
-        unsigned char kk = chip->opcode & 0x00FF;
+        uint8_t x = (chip->opcode & 0x0F00) >> 8;
+        uint8_t kk = chip->opcode & 0x00FF;
         chip->V[x] += kk;
       }
     break;
@@ -157,41 +158,41 @@ void chip8_cycle(struct chip8* chip)
       // 8xy0 Vx = Vyd
       case 0x8000:
         {
-          unsigned char x = (chip->opcode & 0x0F00) >> 8;
-          unsigned char y = (chip->opcode & 0x00F0) >> 4;
+          uint8_t x = (chip->opcode & 0x0F00) >> 8;
+          uint8_t y = (chip->opcode & 0x00F0) >> 4;
           chip->V[x] = chip->V[y];
         }
       break; 
       case 0x8001:
       {
         //Set Vx = Vx OR Vy.
-        unsigned char x = (chip->opcode & 0x0F00) >> 8;
-        unsigned char y = (chip->opcode & 0x00F0) >> 4;
+        uint8_t x = (chip->opcode & 0x0F00) >> 8;
+        uint8_t y = (chip->opcode & 0x00F0) >> 4;
         chip->V[x] = chip->V[x] | chip->V[y];
       }
       break;
       case 0x8002:
       {
          //set vx = vx and vy.
-        unsigned char x = (chip->opcode & 0x0F00) >> 8;
-        unsigned char y = (chip->opcode & 0x00F0) >> 4;
+        uint8_t x = (chip->opcode & 0x0F00) >> 8;
+        uint8_t y = (chip->opcode & 0x00F0) >> 4;
         chip->V[x] = chip->V[x] & chip->V[y]; 
       }
       break;
       case 0x8003:
       {
          //set vx = vx and vy.
-        unsigned char x = (chip->opcode & 0x0F00) >> 8;
-        unsigned char y = (chip->opcode & 0x00F0) >> 4;
+        uint8_t x = (chip->opcode & 0x0F00) >> 8;
+        uint8_t y = (chip->opcode & 0x00F0) >> 4;
         chip->V[x] = chip->V[x] ^ chip->V[y]; 
       }
       break;
       case 0x8004:
       {
         // Vx = Vx + Vy, set VF = carry.
-        unsigned char x = (chip->opcode & 0x0F00) >> 8;
-        unsigned char y = (chip->opcode & 0x00F0) >> 4;
-        unsigned short sum = chip->V[x] + chip->V[y];
+        uint8_t x = (chip->opcode & 0x0F00) >> 8;
+        uint8_t y = (chip->opcode & 0x00F0) >> 4;
+        uint16_t sum = chip->V[x] + chip->V[y];
 
         if(sum > 255)
           chip->V[15] = 1;
@@ -205,9 +206,9 @@ void chip8_cycle(struct chip8* chip)
       {
         // 0x8xy5
         // Vx = Vx - Vy, set VF = NOT borrow.
-        unsigned char x = (chip->opcode & 0x0F00) >> 8;
-        unsigned char y = (chip->opcode & 0x00F0) >> 4;
-        unsigned short sum = chip->V[x] - chip->V[y];
+        uint8_t x = (chip->opcode & 0x0F00) >> 8;
+        uint8_t y = (chip->opcode & 0x00F0) >> 4;
+        uint16_t sum = chip->V[x] - chip->V[y];
 
         if(chip->V[x] > chip->V[y])
           chip->V[15] = 1; //V[15] == VF
@@ -219,7 +220,7 @@ void chip8_cycle(struct chip8* chip)
       break;
       case 0x8006: //Shift Right
       {
-        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+        uint8_t x = (chip->opcode & 0x0F00) >> 8;
 
         if((chip->V[x] & 0x01) == 1)
           chip->V[15] = 1;
@@ -231,9 +232,9 @@ void chip8_cycle(struct chip8* chip)
       break;
       case 0x8007: // SUBN Vx, Vy
       {
-        unsigned char x = (chip->opcode & 0x0F00) >> 8;
-        unsigned char y = (chip->opcode & 0x00F0) >> 4;
-        unsigned short sum = (chip->V[y] - chip->V[x]);
+        uint8_t x = (chip->opcode & 0x0F00) >> 8;
+        uint8_t y = (chip->opcode & 0x00F0) >> 4;
+        uint16_t sum = (chip->V[y] - chip->V[x]);
 
         if (chip->V[y] >= chip->V[x])
           chip->V[15] = 1;
@@ -245,7 +246,7 @@ void chip8_cycle(struct chip8* chip)
       break;
       case 0x800E: //8xyE
       {
-        unsigned char x = (chip->opcode & 0x0F00) >> 8;
+        uint8_t x = (chip->opcode & 0x0F00) >> 8;
 
         if((chip->V[x] & 0x80) != 0)
           chip->V[15] = 1;
@@ -259,8 +260,8 @@ void chip8_cycle(struct chip8* chip)
     break;
        case 0x9000: //9xy0
     {
-      unsigned char x = (chip->opcode & 0x0F00) >> 8;
-      unsigned char y = (chip->opcode & 0x00F0) >> 4;
+      uint8_t x = (chip->opcode & 0x0F00) >> 8;
+      uint8_t y = (chip->opcode & 0x00F0) >> 4;
       // skip next instruction if Vx != Vy
       if(chip->V[x] != chip->V[y])
         chip->pc += 2; 
@@ -269,9 +270,9 @@ void chip8_cycle(struct chip8* chip)
     case 0xA000:
       // Annn LD I
       // ustawić I na nnn
-      // unsigned short 4095 bo potrzeba 12 bitów na 0xfff
+      // uint16_t 4095 bo potrzeba 12 bitów na 0xfff
       {
-        unsigned short nnn = chip->opcode & 0x0FFF;
+        uint16_t nnn = chip->opcode & 0x0FFF;
         chip->I = nnn;
       }
     break;
@@ -279,7 +280,7 @@ void chip8_cycle(struct chip8* chip)
     //Bnnn
     // pc = nnn + V0 
     {
-      unsigned short nnn = chip->opcode & 0x0FFF;
+      uint16_t nnn = chip->opcode & 0x0FFF;
       chip->pc = nnn + chip->V[0]; 
     }
     break;
@@ -287,10 +288,10 @@ void chip8_cycle(struct chip8* chip)
     // Cxkk
     // Vx = random byte AND kk
     {
-      unsigned char kk = chip->opcode & 0x00FF;
-      unsigned char x = chip->opcode & 0x0F00 >> 8;
+      uint8_t kk = chip->opcode & 0x00FF;
+      uint8_t x = chip->opcode & 0x0F00 >> 8;
       // rand() % (max_number + 1 - minimum_number) + minimum_number
-      unsigned char random = rand() % (255 + 1 - 0) + 0;
+      uint8_t random = rand() % (255 + 1 - 0) + 0;
       
       chip->V[x] = random & kk;
     }
@@ -302,22 +303,22 @@ void chip8_cycle(struct chip8* chip)
       // 0000 xxxx 0000 0000 (>> 8) 0000 0000 0000 xxxx
       // 0000 0000 yyyy 0000 (>> 4) 0000 0000 0000 yyyy
       {
-      unsigned char x = chip->V[(chip->opcode & 0x0F00) >> 8];
-      unsigned char y = chip->V[(chip->opcode & 0x00F0) >> 4];
-      unsigned char height = chip->opcode & 0x000F;
+      uint8_t x = chip->V[(chip->opcode & 0x0F00) >> 8];
+      uint8_t y = chip->V[(chip->opcode & 0x00F0) >> 4];
+      uint8_t height = chip->opcode & 0x000F;
       chip->V[0xF] = 0; //VF kolizja
       
-      for (int row = 0; row < height; row++)
+      for (int32_t row = 0; row < height; row++)
       {
-        unsigned char sprite = chip->memory[chip->I + row];
+        uint8_t sprite = chip->memory[chip->I + row];
         
-        for (int col = 0; col < 8; col++)
+        for (int32_t col = 0; col < 8; col++)
         {
           if(sprite & (0x80 >> col)) // 1000 0000, 0100 0000 ... 0000 0001
           {
-            int px = (x + col) % WIDTH;
-            int py = (y + row) % HEIGHT;
-            int index = px + (py * WIDTH);
+            int32_t px = (x + col) % WIDTH;
+            int32_t py = (y + row) % HEIGHT;
+            int32_t index = px + (py * WIDTH);
 
             if (chip->display[index] == 1)
               chip->V[0xF] = 1; // xorowanie
@@ -327,6 +328,20 @@ void chip8_cycle(struct chip8* chip)
         }
       }
       }
+    break;
+    case 0xF000:
+      switch(chip->opcode & 0xF00F)
+    { 
+      case 0xF007:
+      { 
+          // Set Vx = DT
+          //  The value of DT is placed into Vx.
+          uint8_t x = (chip->opcode & 0x0F000) >> 12;
+          chip->V[x] = chip->delay_timer; 
+      }
+      break;
+    }
+      break;
     break;
     default:
      printf("Nieznany opcode: %04x \n", chip->opcode);
@@ -339,7 +354,7 @@ void chip8_cycle(struct chip8* chip)
 
 
 // Główna pętla prawie jak podstawowy projekt w raylib
-int main(int argc, char **argv)
+int32_t main(int32_t argc, char **argv)
 {
     struct chip8 chip;
 
@@ -352,7 +367,7 @@ int main(int argc, char **argv)
     while (!WindowShouldClose())
     { 
       // więcej akcji
-      for (int i = 0; i < 10; i++)
+      for (int32_t i = 0; i < 10; i++)
         chip8_cycle(&chip);
 
       BeginDrawing();
